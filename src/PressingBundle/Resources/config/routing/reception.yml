@@ -1,0 +1,24 @@
+reception_index:
+    path:     /
+    defaults: { _controller: "PressingBundle:Reception:index" }
+    methods:  GET
+
+reception_show:
+    path:     /{id}/show
+    defaults: { _controller: "PressingBundle:Reception:show" }
+    methods:  GET
+
+reception_new:
+    path:     /new
+    defaults: { _controller: "PressingBundle:Reception:new" }
+    methods:  [GET, POST]
+
+reception_edit:
+    path:     /{id}/edit
+    defaults: { _controller: "PressingBundle:Reception:edit" }
+    methods:  [GET, POST]
+
+reception_delete:
+    path:     /{id}/delete
+    defaults: { _controller: "PressingBundle:Reception:delete" }
+    methods:  DELETE

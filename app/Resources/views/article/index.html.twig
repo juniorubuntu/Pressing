@@ -1,0 +1,49 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <h1>Liste des articles</h1>
+
+    <table class="table table-striped table-bordered panel-default" id="datatable-buttons">
+        <thead class="panel-heading">
+            <tr>
+                <th>Id</th>
+                <th>Designation</th>
+                <th>Prix Unit.</th>
+                <th>Nbre Pieces</th>
+                <th>Définitif</th>
+                <th>Détails</th>
+                <th>Modifier/Supprimer</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for article in articles %}
+                <tr>
+                    <td><a href="{{ path('article_show', { 'id': article.id }) }}">{{ article.id }}</a></td>
+                    <td>{{ article.designation }}</td>
+                    <td>{{ article.prixUnit }}</td>
+                    <td>{{ article.nbrePiece }}</td>
+                    <td>{% if article.definitif %}Yes{% else %}No{% endif %}</td>
+                    <td>
+                        <a href="{{ path('article_show', { 'id': article.id }) }}">Détail</a>
+                    </td>
+                    <td>
+                        <a href="{{ path('article_edit', { 'id': article.id }) }}">Modifier</a>
+
+                    </td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+    <ul>
+        <li>
+            <a href="{{ path('article_new') }}">Créer un nouvel article</a>
+        </li>
+    </ul>
+    <script type = "text/javascript" >
+        $(document).ready(function () {
+            $('#datatable-responsive').DataTable();
+            TableManageButtons.init();
+        });
+    </script>
+{% endblock %}

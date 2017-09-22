@@ -1,0 +1,35 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <h1>Liste des tâches</h1>
+    <table class="table table-hover table-bordered panel-default">
+        <thead class="panel-heading">
+            <tr>
+                <th>Id</th>
+                <th>Nom</th>
+                <th>Détails</th>
+                <th>Modifier/Supprimer</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for tache in taches %}
+                <tr>
+                    <td><a href="{{ path('tache_show', { 'id': tache.id }) }}">{{ tache.id }}</a></td>
+                    <td>{{ tache.nom }}</td>
+                    <td>
+                        <a href="{{ path('tache_show', { 'id': tache.id }) }}">Détail</a>
+                    </td>
+                    <td>
+                        <a href="{{ path('tache_edit', { 'id': tache.id }) }}">Modifier</a>
+                    </td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+    <ul>
+        <li>
+            <a href="{{ path('tache_new') }}">Créer un nouveau client</a>
+        </li>
+    </ul>
+{% endblock %}

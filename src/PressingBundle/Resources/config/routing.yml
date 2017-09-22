@@ -1,0 +1,46 @@
+pressing_article:
+    resource: "@PressingBundle/Resources/config/routing/article.yml"
+    prefix:   /article
+
+
+pressing_client:
+    resource: "@PressingBundle/Resources/config/routing/client.yml"
+    prefix:   /client
+
+
+pressing_user:
+    resource: "@PressingBundle/Resources/config/routing/user.yml"
+    prefix:   /user
+
+
+pressing_fonction:
+    resource: "@PressingBundle/Resources/config/routing/fonction.yml"
+    prefix:   /fonction
+
+
+pressing_tache:
+    resource: "@PressingBundle/Resources/config/routing/tache.yml"
+    prefix:   /tache
+
+
+pressing_droit:
+    resource: "@PressingBundle/Resources/config/routing/droit.yml"
+    prefix:   /droit
+
+
+pressing_reception:
+    resource: "@PressingBundle/Resources/config/routing/reception.yml"
+    prefix:   /reception
+    
+    
+pressing_articleintervenant:
+    resource: "@PressingBundle/Resources/config/routing/articleintervenant.yml"
+    prefix:   /articleintervenant
+
+pressing_homepage:
+    path:     /
+    defaults: { _controller: PressingBundle:Default:index }
+    
+pressing_homepage:
+    path:     /
+    defaults: { _controller: PressingBundle:Default:index }

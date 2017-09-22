@@ -1,0 +1,4 @@
+services:
+#    pressing.example:
+#        class: PressingBundle\Example
+#        arguments: ["@service_id", "plain_value", "%parameter%"]

@@ -1,0 +1,24 @@
+droit_index:
+    path:     /
+    defaults: { _controller: "PressingBundle:Droit:index" }
+    methods:  GET
+
+droit_show:
+    path:     /{id}/show
+    defaults: { _controller: "PressingBundle:Droit:show" }
+    methods:  GET
+
+droit_new:
+    path:     /new
+    defaults: { _controller: "PressingBundle:Droit:new" }
+    methods:  [GET, POST]
+
+droit_edit:
+    path:     /{id}/edit
+    defaults: { _controller: "PressingBundle:Droit:edit" }
+    methods:  [GET, POST]
+
+droit_delete:
+    path:     /{id}/delete
+    defaults: { _controller: "PressingBundle:Droit:delete" }
+    methods:  DELETE

@@ -1,0 +1,39 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <div class="form-article panel panel-primary">
+        <div class="panel-heading">
+            <h3>Informations sur l'article</h3>
+        </div>
+        <table class="table table-hover panel-body">
+            <tbody>
+                <tr>
+                    <th>Id</th>
+                    <td>{{ article.id }}</td>
+                </tr>
+                <tr>
+                    <th>Désignation</th>
+                    <td>{{ article.designation }}</td>
+                </tr>
+                <tr>
+                    <th>Prix Unit</th>
+                    <td>{{ article.prixUnit }}</td>
+                </tr>
+                <tr>
+                    <th>Nombre pièces</th>
+                    <td>{{ article.nbrePiece }}</td>
+                </tr>
+                <tr>
+                    <th>Définitif</th>
+                    <td>{% if article.definitif %}Yes{% else %}No{% endif %}</td>
+                </tr>
+            </tbody>
+        </table>
+        <div class="panel-footer">
+            <a href="{{ path('article_index') }}">
+                <input type="cancel" value="Retourner à la liste" class="btn btn-default"/>
+            </a>
+            <a href="{{ path('article_edit', { 'id': article.id }) }}" class="btn btn-success pull-right">Modifier</a>
+        </div>
+    </div>
+{% endblock %}

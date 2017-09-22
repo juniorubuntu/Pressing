@@ -1,0 +1,61 @@
+<fieldset class="well">
+    <legend>
+        Ajout d'un nouvel article
+    </legend>
+    <div>
+        <div class="form-group">
+            <div class="row">
+                <div class=" col-sm-12 col-md-12 col-xm-12">
+                    <label>Désignation</label>
+                    {{ form_widget(form.designation, {'attr': {'class': 'form-control', 'placeholder': 'Ex: Pantalon simple'}})  }}
+                </div>
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="row">
+                <div class=" col-sm-12 col-md-12 col-xm-12">
+                    <label>Prix Unitaire</label>
+                    <div class="input-group">
+                        {{ form_widget(form.prixUnit, {'attr': {'class': 'form-control', 'type': 'number', 'placeholder': '1500'}})  }}
+                        <div class="input-group-addon">FCFA</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="row">
+                <div class=" col-sm-12 col-md-12 col-xm-12">
+                    <label>Nombre de pièces</label>
+                    <div class="input-group">
+                        {{ form_widget(form.nbrePiece, {'attr': {'class': 'form-control', 'type': 'number', 'placeholder': '1'}})  }}
+                        <div class="input-group-addon">Pièce(s)</div>
+                    </div>
+                </div>
+            </div>
+            <div class="form-group hide">
+                <div class="row">
+                    <div class=" col-sm-12 col-md-12 col-xm-12">
+                        <label>Définitif ?</label>
+                        {{ form_widget(form.definitif, {'attr': {'class': ''}})  }}
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="">
+            <input onclick="enregisitrer();" type="button" value="Ajouter" class="btn btn-primary pull-right"/>
+        </div>
+    </div>
+    <script>
+        function enregisitrer() {
+            var nom = document.getElementById('pressingbundle_article_designation').value;
+            var prixUnit = document.getElementById('pressingbundle_article_prixUnit').value;
+            var nbrePiece = document.getElementById('pressingbundle_article_nbrePiece').value;
+            $.post('{{path('article_newTemplate')}}',
+                    {
+                        nom: nom,
+                        prixUnit: prixUnit,
+                        nbrePiece: nbrePiece}
+            );
+        }
+    </script>
+</fieldset>

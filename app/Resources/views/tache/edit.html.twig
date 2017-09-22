@@ -1,0 +1,31 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    {{ form_start(edit_form) }}
+    <div class="form-article panel panel-primary">
+        <div class="panel-heading">
+            <h3>Ajout d'une tâche</h3>
+        </div>
+        <div class="panel-body">
+            <div class="form-group">
+                <div class="row">
+                    <div class=" col-sm-3 col-md-3 col-xm-3">
+                        <label>Nom du client</label>
+                        {{ form_widget(edit_form.nom, {'attr': {'class': 'form-control', 'placeholder': 'Ex: Livrer'}})  }}
+                    </div>
+                </div>
+            </div>
+            <div class="">
+                <div class="">
+                    <a href="{{ path('tache_index') }}"><input type="cancel" value="Retourner à la liste" class="btn btn-default"/></a>
+                        {{ form_end(edit_form) }}    
+                    <input type="submit" value="Modifier" class="btn btn-success pull-right"/>
+                </div>
+                <hr>
+                {{ form_start(delete_form) }}
+                <input type="submit" value="Supprimer" class="btn btn-primary"/>
+                {{ form_end(delete_form) }}
+            </div>
+        </div>
+    </div>
+{% endblock %}

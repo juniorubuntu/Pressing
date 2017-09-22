@@ -1,0 +1,35 @@
+Liste provisoire des articles de la transaction
+<table class="table table-bordered table-hover">
+    <thead class="alert-info">
+        <tr>
+            <th>N°</th>
+            <th>Désignation</th>
+            <th>Couleur</th>
+            <th>Prix Unit.</th>
+            <th>Qté(s)</th>
+            <th>Prix Tot.</th>
+            <th>Supp.</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% set num = 1 %}
+        {% set somme = 0%}
+        {% for articleIntervenant in liste %}
+            <tr>
+                <td>{{num}}</td>
+                <td>{{ articleIntervenant.article.designation | upper }}</td>
+                <td><button class="btn" style="background-color: {{articleIntervenant.couleur}}"></button></td>
+                <td>{{ articleIntervenant.article.prixunit }}</td>
+                <td>{{ articleIntervenant.quantiteDepose }}</td>
+                <td>{{ articleIntervenant.quantiteDepose * articleIntervenant.article.prixunit }}</td>
+                <td><button onclick="loadArticle({{articleIntervenant.id}}, 0);" class=""><span class="glyphicon glyphicon-remove danger" style="color: red"></span></button></td>
+            </tr>
+            {% set num = num + 1 %}
+            {% set somme = somme + articleIntervenant.quantiteDepose * articleIntervenant.article.prixunit %}
+        {% endfor %}
+        <tr>
+            <td colspan="5">Total: </td>
+            <td colspan="2">{{somme}} FCFA</td>
+        </tr>
+    </tbody>
+</table>

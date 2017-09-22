@@ -1,0 +1,39 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+
+    <h1>Liste des Fonctions</h1>
+    <ul>
+        <li>
+            <a href="{{ path('fonction_new') }}">Create a new fonction</a>
+        </li>
+    </ul>
+    <table class="table table-hover table-bordered panel-default" id="liste_fonction">
+        <thead class="panel-heading">
+            <tr>
+                <th>Id</th>
+                <th>Nom de la fonction</th>
+                <th class="success">Salaire de base</th>
+                <th>Liste des accès</th>
+                <th>Détails</th>
+                <th>Modifier/Supprimer</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for fonction in fonctions %}
+                <tr>
+                    <td><a href="{{ path('fonction_show', { 'id': fonction.id }) }}">{{ fonction.id }}</a></td>
+                    <td>{{ fonction.nom }}</td>
+                    <td class="success text-inverse text text-bold">{{ fonction.salaire }} FCFA</td>
+                    <td>{% if fonction.listeDesAcces %}{{ fonction.listeDesAcces|join(', ') }}{% endif %}</td>
+                    <td>
+                        <a href="{{ path('fonction_show', { 'id': fonction.id }) }}">Détail</a>
+                    </td>
+                    <td>
+                        <a href="{{ path('fonction_edit', { 'id': fonction.id }) }}">Modifier</a>
+                    </td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+{% endblock %}

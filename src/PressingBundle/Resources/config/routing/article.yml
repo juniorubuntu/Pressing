@@ -1,0 +1,30 @@
+article_index:
+    path:     /
+    defaults: { _controller: "PressingBundle:Article:index" }
+    methods:  GET
+
+article_show:
+    path:     /{id}/show
+    defaults: { _controller: "PressingBundle:Article:show" }
+    methods:  GET
+
+article_new:
+    path:     /new
+    defaults: { _controller: "PressingBundle:Article:new" }
+    methods:  [GET, POST]
+
+article_edit:
+    path:     /{id}/edit
+    defaults: { _controller: "PressingBundle:Article:edit" }
+    methods:  [GET, POST]
+
+article_delete:
+    path:     /{id}/delete
+    defaults: { _controller: "PressingBundle:Article:delete" }
+    methods:  DELETE
+
+
+article_newTemplate:
+    path:     /newTemplate
+    defaults: { _controller: "PressingBundle:Article:newTemplate" }
+    methods:  [GET, POST]

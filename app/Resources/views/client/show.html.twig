@@ -1,0 +1,35 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <div class="form-article panel panel-primary">
+        <div class="panel-heading">
+            <h3>Informations sur l'article</h3>
+        </div>
+        <table class="table table-hover panel-body">
+            <tbody>
+                <tr>
+                    <th>Id</th>
+                    <td>{{ client.id }}</td>
+                </tr>
+                <tr>
+                    <th>Nom</th>
+                    <td>{{ client.nom }}</td>
+                </tr>
+                <tr>
+                    <th>Telephone</th>
+                    <td>{{ client.telephone }}</td>
+                </tr>
+                <tr>
+                    <th>Email</th>
+                    <td>{{ client.email }}</td>
+                </tr>
+            </tbody>
+        </table>
+        <div class="panel-footer">
+            <a href="{{ path('client_index') }}">
+                <input type="cancel" value="Retourner à la liste" class="btn btn-default"/>
+            </a>
+            <a href="{{ path('client_edit', { 'id': client.id }) }}" class="btn btn-success pull-right">Modifier</a>
+        </div>
+    </div>
+{% endblock %}

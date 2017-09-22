@@ -1,0 +1,40 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <h1>Articleintervenant</h1>
+
+    <table>
+        <tbody>
+            <tr>
+                <th>Id</th>
+                <td>{{ articleIntervenant.id }}</td>
+            </tr>
+            <tr>
+                <th>Quantitedepose</th>
+                <td>{{ articleIntervenant.quantiteDepose }}</td>
+            </tr>
+            <tr>
+                <th>Quantiteretire</th>
+                <td>{{ articleIntervenant.quantiteRetire }}</td>
+            </tr>
+            <tr>
+                <th>Encours</th>
+                <td>{% if articleIntervenant.enCours %}Yes{% else %}No{% endif %}</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <ul>
+        <li>
+            <a href="{{ path('articleintervenant_index') }}">Back to the list</a>
+        </li>
+        <li>
+            <a href="{{ path('articleintervenant_edit', { 'id': articleIntervenant.id }) }}">Edit</a>
+        </li>
+        <li>
+            {{ form_start(delete_form) }}
+                <input type="submit" value="Delete">
+            {{ form_end(delete_form) }}
+        </li>
+    </ul>
+{% endblock %}

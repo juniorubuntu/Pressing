@@ -1,0 +1,26 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    {{ form_start(form) }}
+
+    <div class="form-article panel panel-primary">
+        <div class="panel-heading">
+            <h3>Ajout d'une tâche</h3>
+        </div>
+        <div class="panel-body">
+            <div class="form-group">
+                <div class="row">
+                    <div class=" col-sm-3 col-md-3 col-xm-3">
+                        <label>Nom de la tâche</label>
+                        {{ form_widget(form.nom, {'attr': {'class': 'form-control', 'placeholder': 'Ex: Receptionner'}})  }}
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="panel-footer">
+            <a href="{{ path('tache_index') }}"><input type="cancel" value="Retourner à la liste" class="btn btn-default"/></a>
+            <input type="submit" value="Ajouter" class="btn btn-primary pull-right"/>
+        </div>
+    </div>
+    {{ form_end(form) }}
+{% endblock %}

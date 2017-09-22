@@ -1,0 +1,24 @@
+tache_index:
+    path:     /
+    defaults: { _controller: "PressingBundle:Tache:index" }
+    methods:  GET
+
+tache_show:
+    path:     /{id}/show
+    defaults: { _controller: "PressingBundle:Tache:show" }
+    methods:  GET
+
+tache_new:
+    path:     /new
+    defaults: { _controller: "PressingBundle:Tache:new" }
+    methods:  [GET, POST]
+
+tache_edit:
+    path:     /{id}/edit
+    defaults: { _controller: "PressingBundle:Tache:edit" }
+    methods:  [GET, POST]
+
+tache_delete:
+    path:     /{id}/delete
+    defaults: { _controller: "PressingBundle:Tache:delete" }
+    methods:  DELETE

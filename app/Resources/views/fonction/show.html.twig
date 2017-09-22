@@ -1,0 +1,35 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <div class="form-article panel panel-primary">
+        <div class="panel-heading">
+            <h3>Informations sur la fonction</h3>
+        </div>
+        <table class="table table-hover panel-body">
+            <tbody>
+                <tr>
+                    <th>Id</th>
+                    <td>{{ fonction.id }}</td>
+                </tr>
+                <tr>
+                    <th>Nom</th>
+                    <td>{{ fonction.nom }}</td>
+                </tr>
+                <tr>
+                    <th>Salaire</th>
+                    <td>{{ fonction.salaire }}</td>
+                </tr>
+                <tr>
+                    <th>Listedesacces</th>
+                    <td>{% if fonction.listeDesAcces %}{{ fonction.listeDesAcces|join(', ') }}{% endif %}</td>
+                </tr>
+            </tbody>
+        </table>
+        <div class="panel-footer">
+            <a href="{{ path('fonction_index') }}">
+                <input type="cancel" value="Retourner à la liste" class="btn btn-default"/>
+            </a>
+            <a href="{{ path('fonction_edit', { 'id': fonction.id }) }}" class="btn btn-success pull-right">Modifier</a>
+        </div>
+    </div>
+{% endblock %}

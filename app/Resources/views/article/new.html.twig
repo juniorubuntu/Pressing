@@ -1,0 +1,59 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+
+    {{ form_start(form) }}
+
+    <div class="form-article panel panel-primary">
+        <div class="panel-heading">
+            <h3>Ajout d'un article</h3>
+        </div>
+        <div class="panel-body">
+            <div class="form-group">
+                <div class="row">
+                    <div class=" col-sm-3 col-md-3 col-xm-3">
+                        <label>Désignation</label>
+                        {{ form_widget(form.designation, {'attr': {'class': 'form-control', 'placeholder': 'Ex: Pantalon simple'}})  }}
+                    </div>
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="row">
+                    <div class=" col-sm-3 col-md-3 col-xm-3">
+                        <label>Prix Unitaire</label>
+                        <div class="input-group">
+                            {{ form_widget(form.prixUnit, {'attr': {'class': 'form-control', 'type': 'number', 'placeholder': '1500'}})  }}
+                            <div class="input-group-addon">FCFA</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="row">
+                    <div class=" col-sm-3 col-md-3 col-xm-3">
+                        <label>Nombre de pièces</label>
+                        <div class="input-group">
+                            {{ form_widget(form.nbrePiece, {'attr': {'class': 'form-control', 'type': 'number', 'placeholder': '1'}})  }}
+                            <div class="input-group-addon">Pièce(s)</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="row">
+                        <div class=" col-sm-3 col-md-3 col-xm-3">
+                            <label>Définitif ?</label>
+                            {{ form_widget(form.definitif, {'attr': {'class': ''}})  }}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="panel-footer">
+            <a href="{{ path('article_index') }}"><input type="cancel" value="Retourner à la liste" class="btn btn-default"/></a>
+            <input type="submit" value="Ajouter" class="btn btn-primary pull-right"/>
+        </div>
+    </div>
+    {{ form_end(form) }}
+
+
+{% endblock %}

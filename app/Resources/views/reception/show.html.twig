@@ -1,0 +1,56 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <h1>Reception</h1>
+
+    <table>
+        <tbody>
+            <tr>
+                <th>Id</th>
+                <td>{{ reception.id }}</td>
+            </tr>
+            <tr>
+                <th>Express</th>
+                <td>{% if reception.express %}Yes{% else %}No{% endif %}</td>
+            </tr>
+            <tr>
+                <th>Gratuit</th>
+                <td>{% if reception.gratuit %}Yes{% else %}No{% endif %}</td>
+            </tr>
+            <tr>
+                <th>Motifgratuit</th>
+                <td>{{ reception.motifGratuit }}</td>
+            </tr>
+            <tr>
+                <th>Montanttotal</th>
+                <td>{{ reception.montantTotal }}</td>
+            </tr>
+            <tr>
+                <th>Montantverse</th>
+                <td>{{ reception.montantVerse }}</td>
+            </tr>
+            <tr>
+                <th>Dateoperation</th>
+                <td>{% if reception.dateOperation %}{{ reception.dateOperation|date('Y-m-d H:i:s') }}{% endif %}</td>
+            </tr>
+            <tr>
+                <th>Daterdv</th>
+                <td>{% if reception.dateRdv %}{{ reception.dateRdv|date('Y-m-d H:i:s') }}{% endif %}</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <ul>
+        <li>
+            <a href="{{ path('reception_index') }}">Back to the list</a>
+        </li>
+        <li>
+            <a href="{{ path('reception_edit', { 'id': reception.id }) }}">Edit</a>
+        </li>
+        <li>
+            {{ form_start(delete_form) }}
+                <input type="submit" value="Delete">
+            {{ form_end(delete_form) }}
+        </li>
+    </ul>
+{% endblock %}

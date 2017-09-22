@@ -1,0 +1,180 @@
+{% extends 'base.html.twig' %} 
+
+{% block body %}
+
+    {#   {{ form_start(form) }} #}
+
+    <div class="form-article panel panel-default">
+        <div class="">
+            <h3><center>Remplissez le formulaire ci-dessous pour éffectuer une nouvelle reception</center></h3>
+        </div>
+        <fieldset class="col-md-12">
+            <legend>
+                Informations sur le client 
+            </legend>
+            <span class="col-md-12">
+                <span class="col-md-12">
+                    <nav class="col-md-4">
+                        Nom du client: <input list="listClient" class="form-control" placeholder="Ex: Junior Ubuntu" type="text" name="nomClient"/>
+                        <datalist id="listClient">
+                            <select>
+                                {% for client in listClient %}
+                                    <option value="{{client}}">{{client.telephone}}</option>
+                                {% endfor %}
+                            </select>
+                        </datalist>
+
+                    </nav>
+                    <nav class="col-md-4">
+                        Téléphone du client: <input class="form-control" placeholder="Ex: +237 695887564" type="text" name="nomClient"/>
+                    </nav>
+                    <nav class="col-md-4">
+                        Email du client: <input class="form-control" placeholder="Ex: juniorubuntu@gmail.com" type="text" name="nomClient"/>
+                    </nav>
+                </span>
+            </span>
+        </fieldset>
+        <fieldset class="col-md-12">
+            <legend>
+                Informations sur les articles 
+            </legend>
+            <span class="col-md-5">
+                <span class="col-md-12">
+                    <nav class="col-md-7">
+                        Code de l'article: <input list="listArticle" class="form-control" id="nomArticle" placeholder="Entrez le nom de l'article" type="text" name="nomArticle"/>
+                        <datalist id="listArticle">
+                            <select>
+                                {% for article in listArticle %}
+                                    <option value="{{article.id}}">{{article | upper}}</option>
+                                    {% endfor %}
+                            </select>
+                        </datalist>
+                    </nav>
+                    <nav class="col-md-5">
+                        Article non trouvé ?<a href="#" class="btn btn-default" data-toggle="modal" data-target=".bs-example-modal-sm">Ajouter l'article</a>
+                    </nav> 
+                    <div class="modal fade bs-example-modal-sm" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel">
+                        <div class="modal-dialog modal-sm">
+                            <div class="modal-content ajoutArticle">
+
+                            </div>
+                        </div>
+                    </div>
+                </span>
+                <span class="col-md-12">
+                    <nav class="col-md-3">
+                        Quantité: <input class="form-control" id="qte" type="number" value="01" name="quantite"/>
+                    </nav>
+                    <nav class="col-md-3">
+                        Couleur: <input id="couleur" class="form-control" type="color" name="couleur"/>
+                    </nav>
+                    <nav class="col-md-5 col-md-offset-1">
+                        Ajouter à la liste ?<a href="#" onclick="loadArticle();" class="btn btn-primary">Ajouter</a>
+                    </nav>
+                </span>
+            </span>
+            <nav class="col-md-7 listeArticle">
+                Liste provisoire des articles de la transaction
+                <table class="table table-bordered table-hover">
+                    <thead class="alert-info">
+                        <tr>
+                            <th>N°</th>
+                            <th>Désignation</th>
+                            <th>Couleur</th>
+                            <th>Prix Unit.</th>
+                            <th>Qté(s)</th>
+                            <th>Prix Tot.</th>
+                            <th>Supp.</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td colspan="5">Total: </td>
+                            <td colspan="2">0 FCFA</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </nav>
+        </fieldset>
+
+        <fieldset class="col-md-12">
+            <legend>
+                Informations sur le paiement et le rendez-vous 
+            </legend>
+
+            <span class="col-md-12">
+                <span class="col-md-6">
+                    <nav class="col-md-7">
+                        Service Gratuit ?: <input class="" type="checkbox" name="gratuit"/>
+                        <textarea id="gratuit" disabled="disabled" class="form-control" name="motifGratuit">Motif de la gratuité du service..!</textarea>
+                    </nav>
+                    <nav class="col-md-5">
+                        Service Express ?: <input class="" type="checkbox" name="express"/>
+                        <select class="form-control" style="width: 80px">
+                            {% set i = 0%}
+                            {% for i in range(0, 10) %}
+                                <option value="{{i*10}}" title="Nous somme le {{i}}">{{ i*10 }}%</option>
+                            {% endfor %}
+                        </select>
+                        Montant Total: <br>
+                        <strong style="font-size: 24px; color: green">5000 FCFA</strong>
+                    </nav> 
+                </span>
+                <span class="col-md-6">
+                    <nav class="col-md-6">
+                        Date du jour: <input class="form-control" value="2017-09-18T12:13" type="datetime-local" name="jour"/>
+                    </nav>
+                    <nav class="col-md-6">
+                        Rendez-vous le: <input class="form-control" value="2017-09-28T12:13" type="datetime-local" name="rdv"/>
+                    </nav>
+                    <nav class="col-md-4">
+                        Montant avancé: <input class="form-control" type="number" value="5000" name="avance" style="font-size: 20px; text-align: right"/>
+                    </nav>
+                    <nav class="col-md-4">
+                        Reste: <br><strong style="font-size: 24px; color: red">500 FCFA</strong>
+                    </nav>
+                    <nav class="col-md-4">
+                        <br><strong style="font-size: 14px; color: red">Paiement incomplet</strong>
+                    </nav>
+                </span>
+            </span>
+        </fieldset>
+        {#   {{ form_widget(form) }} #}
+    </div>
+    <div class="panel-footer">
+        <a href="{{ path('article_index') }}"><input type="cancel" value="Retourner à la liste" class="btn btn-default"/></a>
+        <input type="submit" value="Aperçue" class="btn btn-primary pull-right"/>
+    </div>
+    {#   {{ form_end(form) }} #}
+    <style>
+        input, table, fieldset, select, textarea, td{
+            border: 1px solid !important;
+            margin-bottom: 4px;
+        }
+    </style>
+    <script>
+        $('.ajoutArticle').load('{{path('article_newTemplate')}}');
+
+        function loadArticle(id, test) {
+            var nom = $('#nomArticle').val();
+            var qte = $('#qte').val();
+            var couleur = document.getElementById('couleur').value;
+            couleur = couleur.replace('#', '');
+
+            if (test === 0) {
+                qte = test;
+                nom = id;
+            }
+            if ((qte >= 0) && (nom !== "")) {
+                var lien = '{{path('articleintervenant_liste', {'id': 'NOM', 'qte': 'QTE', 'couleur': 'COULEUR'})}}';
+                lien = lien.replace("NOM", nom);
+                lien = lien.replace("QTE", qte);
+                lien = lien.replace("COULEUR", couleur);
+                $('.listeArticle').load(lien);
+            }
+            $('#nomArticle').val('');
+            $('#qte').val('01');
+        }
+
+    </script>
+{% endblock %}

@@ -1,0 +1,24 @@
+fonction_index:
+    path:     /
+    defaults: { _controller: "PressingBundle:Fonction:index" }
+    methods:  GET
+
+fonction_show:
+    path:     /{id}/show
+    defaults: { _controller: "PressingBundle:Fonction:show" }
+    methods:  GET
+
+fonction_new:
+    path:     /new
+    defaults: { _controller: "PressingBundle:Fonction:new" }
+    methods:  [GET, POST]
+
+fonction_edit:
+    path:     /{id}/edit
+    defaults: { _controller: "PressingBundle:Fonction:edit" }
+    methods:  [GET, POST]
+
+fonction_delete:
+    path:     /{id}/delete
+    defaults: { _controller: "PressingBundle:Fonction:delete" }
+    methods:  DELETE

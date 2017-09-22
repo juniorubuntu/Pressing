@@ -1,0 +1,31 @@
+articleintervenant_liste:
+    path:     /liste/{id}-{qte}-{couleur}
+    defaults: { _controller: "PressingBundle:ArticleIntervenant:liste", id: 0, qte: 0 }
+    methods:  GET
+    
+    
+articleintervenant_index:
+    path:     /
+    defaults: { _controller: "PressingBundle:ArticleIntervenant:index" }
+    methods:  GET
+  
+
+articleintervenant_show:
+    path:     /{id}/show
+    defaults: { _controller: "PressingBundle:ArticleIntervenant:show" }
+    methods:  GET
+
+articleintervenant_new:
+    path:     /new
+    defaults: { _controller: "PressingBundle:ArticleIntervenant:new" }
+    methods:  [GET, POST]
+
+articleintervenant_edit:
+    path:     /{id}/edit
+    defaults: { _controller: "PressingBundle:ArticleIntervenant:edit" }
+    methods:  [GET, POST]
+
+articleintervenant_delete:
+    path:     /{id}/delete
+    defaults: { _controller: "PressingBundle:ArticleIntervenant:delete" }
+    methods:  DELETE
