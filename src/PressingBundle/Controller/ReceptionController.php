@@ -29,6 +29,19 @@ class ReceptionController extends Controller {
     }
 
     /**
+     * Recu reception.
+     *
+     */
+    public function recuAction() {
+        $em = $this->getDoctrine()->getManager();
+
+
+
+        return $this->render('reception/recuReception.html.twig', array(
+        ));
+    }
+
+    /**
      * Creates a new reception entity.
      *
      */
@@ -49,8 +62,33 @@ class ReceptionController extends Controller {
             $em->flush();
         }
 
-        if ($form->isSubmitted() && $form->isValid()) {
+
+        if ($form->isSubmitted()) {
             $em = $this->getDoctrine()->getManager();
+
+            $express = $request->request->get("express");
+            $nomClient = $request->request->get("nomClient");
+            $phoneClient = $request->request->get("phoneClient");
+
+            $date = new \DateTime("now");
+
+            die($date);
+
+
+
+            $leClient = $em->getRepository('PressingBundle:Client')->findOneBy(array('nom' => $nomClient, 'telephone' => $phoneClient));
+
+            if ($leClient == NULL) {
+                $leClient = new Client();
+                $leClient->setNom($nomClient);
+                $leClient->setTelephone($phoneClient);
+                $em->persist($leClient);
+            }
+            $reception->setDateOperation($date);
+            $reception->setPersonnel($this->getUser());
+            $reception->setClient($leClient);
+            $reception->setExpress($express);
+
             $em->persist($reception);
             $em->flush();
 
