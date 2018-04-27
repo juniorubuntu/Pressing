@@ -1,19 +1,20 @@
 {% extends 'base.html.twig' %}
 
 {% block body %}
-    <h1>Receptions list</h1>
+    <h1>Liste des receptions</h1>
 
-    <table>
-        <thead>
+    <table class="table table-striped table-bordered panel-info" id="datatable-buttons">
+        <thead class="panel-heading">
             <tr>
                 <th>Id</th>
+                <th>Client</th>
+                <th>Receptionniste</th>
                 <th>Express</th>
                 <th>Gratuit</th>
-                <th>Motifgratuit</th>
-                <th>Montanttotal</th>
-                <th>Montantverse</th>
-                <th>Dateoperation</th>
-                <th>Daterdv</th>
+                <th>Montant total</th>
+                <th>Montant verse</th>
+                <th>Date operation</th>
+                <th>Date rdv</th>
                 <th>Actions</th>
             </tr>
         </thead>
@@ -21,22 +22,16 @@
             {% for reception in receptions %}
                 <tr>
                     <td><a href="{{ path('reception_show', { 'id': reception.id }) }}">{{ reception.id }}</a></td>
-                    <td>{% if reception.express %}Yes{% else %}No{% endif %}</td>
-                    <td>{% if reception.gratuit %}Yes{% else %}No{% endif %}</td>
-                    <td>{{ reception.motifGratuit }}</td>
+                    <td>{{ reception.client }}</td>
+                    <td>{{ reception.personnel }}</td>
+                    <td>{% if reception.express %}Expr: {{reception.express * 100}}%{% else %}Non{% endif %}</td>
+                    <td>{% if reception.gratuit %}Grat.{% else %}Non{% endif %}</td>
                     <td>{{ reception.montantTotal }}</td>
                     <td>{{ reception.montantVerse }}</td>
                     <td>{% if reception.dateOperation %}{{ reception.dateOperation|date('Y-m-d H:i:s') }}{% endif %}</td>
                     <td>{% if reception.dateRdv %}{{ reception.dateRdv|date('Y-m-d H:i:s') }}{% endif %}</td>
                     <td>
-                        <ul>
-                            <li>
-                                <a href="{{ path('reception_show', { 'id': reception.id }) }}">show</a>
-                            </li>
-                            <li>
-                                <a href="{{ path('reception_edit', { 'id': reception.id }) }}">edit</a>
-                            </li>
-                        </ul>
+                        <a href="{{ path('reception_show', { 'id': reception.id }) }}">Détails</a>
                     </td>
                 </tr>
             {% endfor %}
@@ -48,4 +43,11 @@
             <a href="{{ path('reception_new') }}">Create a new reception</a>
         </li>
     </ul>
+
+    <script type = "text/javascript" >
+        $(document).ready(function () {
+            $('#datatable-responsive').DataTable();
+            TableManageButtons.init();
+        });
+    </script>
 {% endblock %}

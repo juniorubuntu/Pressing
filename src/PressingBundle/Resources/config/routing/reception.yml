@@ -12,6 +12,10 @@ reception_new:
     path:     /new
     defaults: { _controller: "PressingBundle:Reception:new" }
     methods:  [GET, POST]
+    
+reception_recu:
+    path:     /{id}/recu
+    defaults: { _controller: "PressingBundle:Reception:recu" }
 
 reception_edit:
     path:     /{id}/edit

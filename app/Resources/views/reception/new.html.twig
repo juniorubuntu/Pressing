@@ -2,12 +2,14 @@
 
 {% block body %}
 
-    {#   {{ form_start(form) }} #}
+    {{ form_start(form) }} 
 
     <div class="form-article panel panel-default">
+        <!--
         <div class="">
             <h3><center>Remplissez le formulaire ci-dessous pour éffectuer une nouvelle reception</center></h3>
         </div>
+        -->
         <fieldset class="col-md-12">
             <legend>
                 Informations sur le client 
@@ -15,7 +17,7 @@
             <span class="col-md-12">
                 <span class="col-md-12">
                     <nav class="col-md-4">
-                        Nom du client: <input list="listClient" class="form-control" placeholder="Ex: Junior Ubuntu" type="text" name="nomClient"/>
+                        Nom du client: <input list="listClient" id="nomClient" required="required" class="form-control" placeholder="Ex: Junior Ubuntu" type="text" name="nomClient"/>
                         <datalist id="listClient">
                             <select>
                                 {% for client in listClient %}
@@ -26,10 +28,10 @@
 
                     </nav>
                     <nav class="col-md-4">
-                        Téléphone du client: <input class="form-control" placeholder="Ex: +237 695887564" type="text" name="nomClient"/>
+                        Téléphone du client: <input id="phoneClient" class="form-control" placeholder="Ex: +237 695887564" type="text" name="phoneClient"/>
                     </nav>
                     <nav class="col-md-4">
-                        Email du client: <input class="form-control" placeholder="Ex: juniorubuntu@gmail.com" type="text" name="nomClient"/>
+                        Email du client: <input id="mailClient" class="form-control" placeholder="Ex: juniorubuntu@gmail.com" type="text" name="emailClient"/>
                     </nav>
                 </span>
             </span>
@@ -41,12 +43,12 @@
             <span class="col-md-5">
                 <span class="col-md-12">
                     <nav class="col-md-7">
-                        Code de l'article: <input list="listArticle" class="form-control" id="nomArticle" placeholder="Entrez le nom de l'article" type="text" name="nomArticle"/>
+                        Code de l'article: <input  list="listArticle" onclick="$('#listArticle').load('{{path('article_newList')}}');" class="form-control" id="nomArticle" placeholder="Entrez le nom de l'article" type="text" name="nomArticle"/>
                         <datalist id="listArticle">
                             <select>
                                 {% for article in listArticle %}
                                     <option value="{{article.id}}">{{article | upper}}</option>
-                                    {% endfor %}
+                                {% endfor %}
                             </select>
                         </datalist>
                     </nav>
@@ -75,7 +77,7 @@
             </span>
             <nav class="col-md-7 listeArticle">
                 Liste provisoire des articles de la transaction
-                <table class="table table-bordered table-hover">
+                <table class="table table-bordered table-hover"  id="articleInterv">
                     <thead class="alert-info">
                         <tr>
                             <th>N°</th>
@@ -90,7 +92,7 @@
                     <tbody>
                         <tr>
                             <td colspan="5">Total: </td>
-                            <td colspan="2">0 FCFA</td>
+                            <td colspan="2" id="total">0 FCFA</td>
                         </tr>
                     </tbody>
                 </table>
@@ -105,55 +107,191 @@
             <span class="col-md-12">
                 <span class="col-md-6">
                     <nav class="col-md-7">
-                        Service Gratuit ?: <input class="" type="checkbox" name="gratuit"/>
-                        <textarea id="gratuit" disabled="disabled" class="form-control" name="motifGratuit">Motif de la gratuité du service..!</textarea>
+                        Service Gratuit ?: <input name="gratuit" class="" id="gratuit" value="1" onclick="grat();" type="checkbox"/>
+                        {{ form_widget(form.gratuit, {'attr': {'class': 'form-control hide'}})}}
                     </nav>
                     <nav class="col-md-5">
-                        Service Express ?: <input class="" type="checkbox" name="express"/>
-                        <select class="form-control" style="width: 80px">
+                        Service Express ?: 
+                        <select onchange="expressServ(value);" class="form-control" style="width: 80px" id="express" name="express">
                             {% set i = 0%}
                             {% for i in range(0, 10) %}
-                                <option value="{{i*10}}" title="Nous somme le {{i}}">{{ i*10 }}%</option>
+                                <option value="{{i*10/100}}" title="Nous somme le {{i}}">{{ i*10 }}%</option>
                             {% endfor %}
                         </select>
-                        Montant Total: <br>
-                        <strong style="font-size: 24px; color: green">5000 FCFA</strong>
                     </nav> 
                 </span>
                 <span class="col-md-6">
                     <nav class="col-md-6">
-                        Date du jour: <input class="form-control" value="2017-09-18T12:13" type="datetime-local" name="jour"/>
+                        Date du jour: <input id="dateDpt" disabled="disabled" value = "{{"now"|date('Y-m-d h:m')}}" class="form-control"  />
+                    </nav>
+                    <nav class="col-md-6" style="margin-bottom: 8px;">
+                        Montant Total:
+                        <nav class="input-group">
+                            <input class="form-control" type="number" id="montantTotal" value="0" name="montantTotal" disabled="disabled" style="font-size: 24px; color: green; text-align: right"/>
+                            {{ form_widget(form.montantTotal, {'attr': {'class': 'form-control hide', 'value': 0, 'style':'font-size: 24px; color: green; text-align: right' }})  }}
+                            <div class="input-group-addon">FCFA</div>
+                        </nav>
                     </nav>
                     <nav class="col-md-6">
-                        Rendez-vous le: <input class="form-control" value="2017-09-28T12:13" type="datetime-local" name="rdv"/>
+                        Rendez-vous le: {{ form_widget(form.dateRdv, {'attr': {'class': 'form-control'}})  }}
                     </nav>
-                    <nav class="col-md-4">
-                        Montant avancé: <input class="form-control" type="number" value="5000" name="avance" style="font-size: 20px; text-align: right"/>
+                    <nav class="col-md-6">
+                        Montant Avance:
+                        <nav class="input-group">
+                            {{ form_widget(form.montantVerse, {'attr': {'class': 'form-control', 'value': 0, 'style':'font-size: 24px; text-align: right', 'min': 0, 'max': 0}})  }}
+                            <div class="input-group-addon">FCFA</div>
+                        </nav>
                     </nav>
+                    {#
                     <nav class="col-md-4">
                         Reste: <br><strong style="font-size: 24px; color: red">500 FCFA</strong>
                     </nav>
                     <nav class="col-md-4">
                         <br><strong style="font-size: 14px; color: red">Paiement incomplet</strong>
                     </nav>
+                    #}
                 </span>
             </span>
         </fieldset>
-        {#   {{ form_widget(form) }} #}
+        {{ form_widget(form) }}
     </div>
     <div class="panel-footer">
-        <a href="{{ path('article_index') }}"><input type="cancel" value="Retourner à la liste" class="btn btn-default"/></a>
-        <input type="submit" value="Aperçue" class="btn btn-primary pull-right"/>
+        <a href="{{ path('reception_index') }}"><input type="cancel" value="Retourner à la liste" class="btn btn-default"/></a>
+        <input href="#" type="button" onclick="collecte();" value="Aperçue" class="btn btn-default pull-right" data-toggle="modal" data-target=".apercue">
+        <div class="modal fade apercue" tabindex="-1" role="dialog" aria-labelledby="apercue">
+            <div class="modal-dialog modal-lg">
+                <div class="modal-content col-md-12">
+                    <div style="width: 100%; margin: 0%">
+                        <h2><center><u>Aperçue du reçu</u></center></h2>
+                        <div style="width: 100%">
+                            <div>
+                                <legend><b>
+                                        Identifiants de la réception
+                                    </b></legend>
+                                <nav style="width: 100%; display: inline-flex;">
+                                    <nav style="width: 45%">
+                                        Code du Reçu: <b>Indisponible</b>
+                                    </nav>
+                                    <nav style="width: 25%">
+                                        Date de dépôt:  <b><span id="dateDepot">10/Oct/2017, 17h30</span></b>
+                                    </nav>
+                                    <nav style="width: 30%">
+                                        Date de Livraison: <b><span id="dateRdv">15/Oct/2017, 17h30</span></b>
+                                    </nav>
+                                </nav>
+                            </div>
+                        </div>
+                        <div style="width: 100%; display: inline-flex;">
+                            <div style="width: 30%">
+                                <div style="width: 100%;">
+                                    <div>
+                                        <legend><b>
+                                                Informations sur le client
+                                            </b></legend>
+                                        <div style="width: 100%">
+                                            Nom du client: <b><span id="client">ATEMGOUA BRUMEL</span></b><br>
+                                            Téléphone: <span id="phone">695951176</span><br>
+                                            E-mail: <b><span id="mail">juniorubuntu@gmail.com</span></b><br>
+                                        </div>
+                                    </div>
+                                    <div style="width: 100%">
+                                        <div>
+                                            <legend><b>
+                                                    Avis aux clients
+                                                </b></legend>
+                                            <p>
+                                                &nbsp;&nbsp;&nbsp; Nous sommes spécialisé en prestation de servicers, lavages, habillement, 
+                                                déciration et ammeublement des sites pour évênements (Mariages, Baptêmes, Anniversaire, et bien d'autres services,
+                                                )à des prix défiant toute concurence.
+                                            </p>
+                                            <b><u>NB:</u>Après 6 lavages payés comptant, le septième (7<sup>ème</sup>) lavage est gratuit.</b>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div style="width: 70%;padding: 2px">
+                                <div>
+                                    <legend><b>
+                                            Informations sur les articles de la réception
+                                        </b></legend>
+                                    <table class="table table-hover" style="width: 100%" id="articleInterv">
+                                        <thead class="alert-info">
+                                            <tr>
+                                                <th class="th">N°</th>
+                                                <th class="th">Désignation(s)</th>
+                                                <th class="th">Couleur(s)</th>
+                                                <th class="th">Prix Unit.</th>
+                                                <th class="th">Qté(s)</th>
+                                                <th class="th">Prix Tot.</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody id="bodyApercue">
+
+                                        </tbody>
+                                    </table>
+                                    <div style="width: 100%">
+                                        <span id="gratuitApercu">Service Gratuit: NON</span>
+                                        <span class="pull-right" id="expressApercu">Service Express: Non </span><br>
+                                        <center>Montant du service: <b><span class="prix" id="totalApercu" style="color: green">0</span></b> FCFA </center><br>
+                                        Avance: <span class="prix" id="avanceApercu">0 </span>FCFA         
+                                        <span class="pull-right">Reste: <span class="prix" id="resteApercu">0 </span>FCFA  </span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div>
+                            <style>
+                                .apercue{
+                                    font-size: 12px;
+                                }
+                                legend, .prix{
+                                    font-size: 16px;
+                                }
+                            </style>
+                            <br>
+                            <input type="submit"  value="Valider" class="btn btn-primary pull-right"/>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
-    {#   {{ form_end(form) }} #}
+    {{ form_end(form) }}
     <style>
         input, table, fieldset, select, textarea, td{
             border: 1px solid !important;
-            margin-bottom: 4px;
+            margin-bottom: 8px;
         }
     </style>
     <script>
         $('.ajoutArticle').load('{{path('article_newTemplate')}}');
+        document.getElementById('pressingbundle_reception_dateRdv').type = 'datetime-local';
+        $('#pressingbundle_reception_gratuit').removeAttr('required');
+
+        function grat() {
+            var test = document.getElementById('gratuit').value;
+            if (test === "1") {
+                $('#pressingbundle_reception_gratuit').removeClass('hide');
+                $('#pressingbundle_reception_gratuit').attr("required", "required");
+
+                document.getElementById('montantTotal').value = 0;
+                document.getElementById('pressingbundle_reception_montantTotal').value = 0;
+
+                //On rend le total nul lorsque le service est gtratuit
+                document.getElementById('gratuit').value = 0;
+                document.getElementById('pressingbundle_reception_montantVerse').max = document.getElementById('montantTotal').value;
+
+            } else if (test === "0") {
+                $('#pressingbundle_reception_gratuit').addClass('hide');
+                $('#pressingbundle_reception_gratuit').removeAttr('required');
+                document.getElementById('gratuit').value = 1;
+
+                //On remet la valeur du total si le service n'est plus gratuit
+                document.getElementById('montantTotal').value = document.getElementById('total').innerHTML;
+                document.getElementById('pressingbundle_reception_montantTotal').value = document.getElementById('total').innerHTML;
+                document.getElementById('pressingbundle_reception_montantVerse').max = document.getElementById('montantTotal').value;
+            }
+        }
 
         function loadArticle(id, test) {
             var nom = $('#nomArticle').val();
@@ -174,6 +312,93 @@
             }
             $('#nomArticle').val('');
             $('#qte').val('01');
+            //document.getElementById('totalP').innerHTML = document.getElementById('total').innerHTML;
+        }
+
+        function expressServ(value) {
+            var lien = '{{path('articleintervenant_liste', {'id': 'NOM', 'qte': 'QTE', 'couleur': 'COULEUR', express: 'EXPRESS'})}}';
+            lien = lien.replace("EXPRESS", value);
+            $('.listeArticle').load(lien);
+        }
+
+        function validDate() {
+
+            var depot = document.getElementById('dateDpt').value;
+            depot = depot.replace(' ', 'T');
+            var rdv = document.getElementById('pressingbundle_reception_dateRdv').value;
+
+            if (depot >= rdv) {
+                document.getElementById('pressingbundle_reception_dateRdv').value = "";
+                alert("Attention...!!! \nDate de livraison invalide.\nLa date de livraison ne doit pas être antérieure à la date de réception!");
+            }
+        }
+
+        function collecte() {
+
+            //On enleve les rquiered sur l'ajout d'un article innexistant
+
+            $('#pressingbundle_article_designation').removeAttr('required');
+            $('#pressingbundle_article_prixUnit').removeAttr('required');
+            $('#pressingbundle_article_nbrePiece').removeAttr('required');
+
+            // Vérification des dates
+
+            validDate();
+
+            // recuperation des données du client
+
+            var nomCLient = document.getElementById('nomClient').value;
+            document.getElementById('client').innerHTML = nomCLient.toUpperCase();
+
+            var phoneCLient = document.getElementById('phoneClient').value;
+            document.getElementById('phone').innerHTML = phoneCLient;
+
+            var mailCLient = document.getElementById('mailClient').value;
+            document.getElementById('mail').innerHTML = mailCLient;
+
+            //Récupération des articles
+
+            var tableau = document.getElementById('articleInterv');
+            var body = tableau.firstElementChild.nextElementSibling;
+            var listTr = body.children;
+
+            var tabFinal = '';
+            var nbreLigne = listTr.length - 1;
+            if (document.getElementById('express').value !== "0") {
+                nbreLigne = nbreLigne - 1;
+            }
+
+            for (i = 0; i < nbreLigne; i++) {
+                tabFinal += '<tr>';
+                listTd = listTr[i].children;
+                for (j = 0; j < listTd.length - 1; j++) {
+                    tabFinal += '<td>';
+                    tabFinal += listTd[j].innerHTML;
+                    tabFinal += '</td>';
+                }
+                tabFinal += '</tr>';
+            }
+            tabFinal += listTr[i].innerHTML;
+            document.getElementById('bodyApercue').innerHTML = tabFinal;
+
+            document.getElementById('totalApercu').innerHTML = document.getElementById('montantTotal').value;
+            document.getElementById('avanceApercu').innerHTML = document.getElementById('pressingbundle_reception_montantVerse').value || 0;
+            document.getElementById('resteApercu').innerHTML = (document.getElementById('montantTotal').value - document.getElementById('pressingbundle_reception_montantVerse').value) || 0;
+
+            document.getElementById('dateDepot').innerHTML = Date();
+            document.getElementById('dateRdv').innerHTML = document.getElementById('pressingbundle_reception_dateRdv').value;
+            if (document.getElementById('express').value !== 0) {
+                document.getElementById('expressApercu').innerHTML = "Service Express: " + document.getElementById('express').value * 100 + "%";
+            } else {
+                document.getElementById('expressApercu').innerHTML = "Service Express: NON";
+            }
+
+            if (document.getElementById('gratuit').value === "1") {
+                document.getElementById('gratuitApercu').innerHTML = "Service Gratuit: NON";
+            } else {
+                document.getElementById('gratuitApercu').innerHTML = "Service Gratuit: OUI";
+            }
+
         }
 
     </script>

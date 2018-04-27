@@ -1,0 +1,9 @@
+livraison_index:
+    path:     /
+    defaults: { _controller: "PressingBundle:Livraison:index" }
+    methods:  GET
+    
+    
+livraison_recu:
+    path:     /{id}/recu
+    defaults: { _controller: "PressingBundle:Livraison:recu" }

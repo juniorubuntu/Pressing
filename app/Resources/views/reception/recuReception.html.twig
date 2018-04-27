@@ -1,0 +1,150 @@
+<fieldset style="width: 97%; margin: 0%">
+    <legend><b>
+            Reçu
+        </b></legend>
+    <div style="width: 100%; display: inline-flex;">
+        <nav style="width: 25%; margin-left: 5%; margin-bottom: 2%">
+            <img src="{{asset('images/livraison.png')}}" height="100px" width="100px"/>
+        </nav>
+        <nav style="width: 75%">
+            <center>
+                ETS SELF PRESSING<br>
+                self-group.pressing@gmail.com<br>
+                <a href="#">www.self-pressing.org</a><br>
+                Tel: (+237) 695 95 11 76 / 671 14 54 87<br>
+                Adresse: Nkoldongo (Face Total-Siantou)
+            </center>
+        </nav>
+    </div>
+    <div style="width: 100%">
+        <fieldset>
+            <legend><b>
+                    Identifiants de la réception
+                </b></legend>
+            <nav style="width: 100%; display: inline-flex;">
+                <nav style="width: 45%">
+                    Code du Reçu: <b>17NK-00{{reception.id}}</b>
+                </nav>
+                <nav style="width: 25%">
+                    Date de dépôt:  <b>{{reception.dateOperation | date('d-M-Y à h:m')}}</b>
+                </nav>
+                <nav style="width: 30%">
+                    Date de Livraison: <b>{{reception.daterdv | date('d-M-Y à h:m')}}</b>
+                </nav>
+            </nav>
+        </fieldset>
+    </div>
+    <div style="width: 100%; display: inline-flex;">
+        <div style="width: 50%">
+            <div style="width: 100%;">
+                <fieldset>
+                    <legend><b>
+                            Informations sur le client
+                        </b></legend>
+                    <div style="width: 100%">
+                        Nom du client: <b>{{reception.client | upper}}</b><br>
+                        Téléphone: {{reception.client.telephone}}<br>
+                        E-mail: {{reception.client.email}}<br>
+                    </div>
+                </fieldset>
+                <div style="width: 100%">
+                    <fieldset>
+                        <legend><b>
+                                Avis aux clients
+                            </b></legend>
+                        <p>
+                            &nbsp;&nbsp;&nbsp; Nous sommes spécialisé en prestation de servicers, lavages, habillement, 
+                            déciration et ammeublement des sites pour évênements (Mariages, Baptêmes, Anniversaire, et bien d'autres services,
+                            )à des prix défiant toute concurence.
+                        </p>
+                        <b><u>NB:</u>Après 6 lavages payés comptant, le septième (7<sup>ème</sup>) lavage est gratuit.</b>
+                    </fieldset>
+                </div>
+            </div>
+            <div style="width: 100%; display: inline-flex;">
+                <fieldset style="width: 100%;">
+                    <legend><b>
+                            Confirmation du service
+                        </b></legend>
+                    <div style="display: inline-flex; width: 100%; height: 10%">
+                        <fieldset style="width: 50%;">
+                            <legend><b>
+                                    Le Client
+                                </b></legend>
+                        </fieldset>
+                        <fieldset style="width: 50%">
+                            <legend><b>
+                                    Le Caissier
+                                </b></legend>
+                            <nav>
+                                Junior Ubuntu
+                            </nav>
+                        </fieldset>
+                    </div>
+                </fieldset>
+            </div>
+        </div>
+        <div style="width: 50%;padding: 2px">
+            <fieldset>
+                <legend><b>
+                        Informations sur les articles de la réception
+                    </b></legend>
+                <table class="table" style="width: 100%" id="articleInterv">
+                    <thead>
+                        <tr>
+                            <th class="th">N°</th>
+                            <th class="th">Désignation(s)</th>
+                            <th class="th">Couleur(s)</th>
+                            <th class="th">Prix Unit.</th>
+                            <th class="th">Qté(s)</th>
+                            <th class="th">Prix Tot.</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% set num = 1 %}
+                        {% set somme = 0 %}
+                        {% for art in artInterv %}
+                            <tr>
+                                <td class="td">{{num}}</td>
+                                <td class="td">{{art.article | upper}}</td>
+                                <td class="td"><button class="btn" style="background-color: {{art.couleur}};"></button></td>
+                                <td class="td">{{art.article.prixUnit}}</td>
+                                <td class="td">{{art.quantiteDepose}}</td>
+                                <td class="td">{{art.quantiteDepose * art.article.prixUnit}}</td>
+                            </tr>
+
+                            {% set num = num + 1 %}
+                            {% set somme = somme + art.quantiteDepose * art.article.prixUnit %}
+                        {% endfor %}
+                        {% if reception.express %}
+                            <tr>
+                                <td class="td">{{num}}</td>
+                                <td class="td" colspan="4">SERVICE EXPRESS</td>
+                                <td class="td">{{somme * reception.express}}</td>
+                            </tr>
+                        {% endif %}
+                        <tr>
+                            <td class="td" colspan="5">Total</td>
+                            <td class="td">{{reception.montantTotal}}</td>
+                        </tr>
+                    </tbody>
+                </table>
+                <div style="width: 100%">
+                    <span>Service Gratuit: {% if reception.gratuit %}Oui{% else %}Non{% endif %}</span>
+                    <span style="float: right">Service Express: {% if reception.express %}Oui | {{reception.express * 100}}% {% else %}Non{% endif %} </span><br>
+                    <center>Montant du service: <b><span style="color: green; font-size: 20px">{{reception.montantTotal}}</span></b> FCFA </center><br>
+                    Avance: <span >{{reception.montantVerse}} </span>FCFA         
+                    <span style="float: right">Reste: <span >{{reception.montantTotal - reception.montantVerse}} </span>FCFA  </span> 
+                </div>
+                <br>
+                <u><b>Important:</b></u> Ce reçu doit être bien conservé pour être présenté à la livraison..!
+            </fieldset>
+        </div>
+    </div>
+</fieldset>
+<style>
+    .td, .th{
+        border-bottom: 1px solid black ;
+        border-right: 1px solid black ;
+    }
+</style>

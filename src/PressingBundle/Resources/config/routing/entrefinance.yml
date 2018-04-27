@@ -1,0 +1,24 @@
+entrefinance_index:
+    path:     /
+    defaults: { _controller: "PressingBundle:EntreFinance:index" }
+    methods:  GET
+
+entrefinance_show:
+    path:     /{id}/show
+    defaults: { _controller: "PressingBundle:EntreFinance:show" }
+    methods:  GET
+
+entrefinance_new:
+    path:     /reception-UBDB272Y40842{id}829kvsfvbHBHBDA/
+    defaults: { _controller: "PressingBundle:EntreFinance:new" }
+    methods:  [GET, POST]
+
+entrefinance_edit:
+    path:     /{id}/edit
+    defaults: { _controller: "PressingBundle:EntreFinance:edit" }
+    methods:  [GET, POST]
+
+entrefinance_delete:
+    path:     /{id}/delete
+    defaults: { _controller: "PressingBundle:EntreFinance:delete" }
+    methods:  DELETE

@@ -1,56 +1,126 @@
 {% extends 'base.html.twig' %}
 
 {% block body %}
-    <h1>Reception</h1>
+    <nav class="navbar">
+        <a class="btn btn-default" href="{{ path('reception_index') }}">Retourner à la liste</a>
+        <a class="btn btn-primary pull-right" target="blank" href="{{ path('reception_recu', {'id': reception.id}) }}">Imprimer le reçu</a>
+    </nav>
+    <fieldset class="col-md-12">
+        <legend>Informations sur la réceptions <b>N° 17K00{{reception.id}}</b></legend>
 
-    <table>
-        <tbody>
-            <tr>
-                <th>Id</th>
-                <td>{{ reception.id }}</td>
-            </tr>
-            <tr>
-                <th>Express</th>
-                <td>{% if reception.express %}Yes{% else %}No{% endif %}</td>
-            </tr>
-            <tr>
-                <th>Gratuit</th>
-                <td>{% if reception.gratuit %}Yes{% else %}No{% endif %}</td>
-            </tr>
-            <tr>
-                <th>Motifgratuit</th>
-                <td>{{ reception.motifGratuit }}</td>
-            </tr>
-            <tr>
-                <th>Montanttotal</th>
-                <td>{{ reception.montantTotal }}</td>
-            </tr>
-            <tr>
-                <th>Montantverse</th>
-                <td>{{ reception.montantVerse }}</td>
-            </tr>
-            <tr>
-                <th>Dateoperation</th>
-                <td>{% if reception.dateOperation %}{{ reception.dateOperation|date('Y-m-d H:i:s') }}{% endif %}</td>
-            </tr>
-            <tr>
-                <th>Daterdv</th>
-                <td>{% if reception.dateRdv %}{{ reception.dateRdv|date('Y-m-d H:i:s') }}{% endif %}</td>
-            </tr>
-        </tbody>
-    </table>
+        <div class="col-md-6">
+            <table class="table table-bordered table-striped">
+                <tbody>
+                    <tr>
+                        <th>Client</th>
+                        <td>{{ reception.client }}</td>
+                    </tr>
+                    <tr>
+                        <th>Receptionniste</th>
+                        <td>{{ reception.personnel }}</td>
+                    </tr>
+                    <tr>
+                        <th>Express</th>
+                        <td>{% if reception.express %}Oui | {{reception.express * 100}}% {% else %}Non{% endif %}</td>
+                    </tr>
+                    <tr>
+                        <th>Gratuit</th>
+                        <td>{% if reception.gratuit %}Oui{% else %}Non{% endif %}</td>
+                    </tr>
+                    {% if reception.gratuit %}
+                        <tr>
+                            <th>Motif gratuit</th>
+                            <td>{{ reception.gratuit }}</td>
+                        </tr>
+                    {% endif %}
+                </tbody>
+            </table>
+        </div>
+        <div class="col-md-6">
+            <table class="table table-bordered table-striped">
+                <tbody>
+                    <tr>
+                        <th>Montant total</th>
+                        <td>{{ reception.montantTotal }}</td>
+                    </tr>
+                    <tr>
+                        <th>Montant verse</th>
+                        <td>{{ reception.montantVerse }}</td>
+                    </tr>
+                    <tr>
+                        <th>Montant Restant</th>
+                        <td><span style="font-size: 18px; color: green"><b>{{ reception.montantTotal - reception.montantVerse }}</b> FCFA</span></td>
+                    </tr>
+                    <tr>
+                        <th>Date operation</th>
+                        <td>{% if reception.dateOperation %}{{ reception.dateOperation|date('Y-m-d H:i:s') }}{% endif %}</td>
+                    </tr>
+                    <tr>
+                        <th>Date du rdv</th>
+                        <td>{% if reception.dateRdv %}{{ reception.dateRdv|date('Y-m-d H:i:s') }}{% endif %}</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        {% if date('now') | date('Y-m-d H:i:s') < reception.dateRdv|date('Y-m-d H:i:s') %}
+            <span style="color: red">Vous êtes en avance par rapport au rendez-vous.</span>
+        {% else %}
+            <span style="color: green">Vous êtes en règle par rapport au rendez-vous.</span>
+        {% endif%}
+    </fieldset>
 
-    <ul>
-        <li>
-            <a href="{{ path('reception_index') }}">Back to the list</a>
-        </li>
-        <li>
-            <a href="{{ path('reception_edit', { 'id': reception.id }) }}">Edit</a>
-        </li>
-        <li>
-            {{ form_start(delete_form) }}
-                <input type="submit" value="Delete">
-            {{ form_end(delete_form) }}
-        </li>
-    </ul>
+    <form action="{{path('entrefinance_new', {'id': reception.id})}}" method="POST">
+        <fieldset class="col-md-12">
+            <legend>Articles intervenants <span class="pull-right" style="color: #003300"><input name="tout" type="checkbox" style="zoom:1.5"/>Tout livrer ?</span></legend>
+            <table class="table table-bordered table-striped table-hover">
+                <thead class="alert-success">
+                <th>N°</th>
+                <th>Désignations</th>
+                <th>Couleur</th>
+                <th>Qtés Déposées</th>
+                <th>Prix Unit.</th>
+                <th>Nbres Pièces</th>
+                <th>Prix Tot.</th>
+                <th>Qtés Retirées</th>
+                <th>Qtés Restante</th>
+                <th>Qté à retirer</th>
+                </thead>
+                <tbody>
+                    {% set num = 1 %}
+                    {% for art in articleInterv %}
+                        <tr>
+                            <td>{{ num }}</td>
+                            <td style="width: 30%">{{ art.article | upper }}</td>
+                            <td><button class="btn" style="background-color: {{ art.couleur }}"></button></td>
+                            <td>{{ art.quantiteDepose }}</td>
+                            <td>{{ art.article.prixUnit }}</td>
+                            <td>{{ art.article.nbrePiece }}</td>
+                            <td>{{ art.quantiteDepose * art.article.prixUnit }}</td>
+                            <td>{{ art.quantiteRetire }}</td>
+                            <td>{{ art.quantiteDepose - art.quantiteRetire }}</td>
+                            <td><input type="number" name="arti_{{art.id}}" min="0" value="0" max="{{ art.quantiteDepose - art.quantiteRetire }}"></td>
+                        </tr>
+                        {% set num = num + 1 %}
+                    {% endfor %}
+                </tbody>
+            </table>
+
+        </fieldset>
+        <div class="col-md-5 col-md-offset-7" style="display: inline-flex;">
+            <span class=""><b>Complèter le paiement ?</b></span> 
+            <input class="form-control" name="montant" value="0" type="number" min="0" max="{{reception.montantTotal - reception.montantVerse}}" style="width: 40%; border: 1px solid; font-size: 24px; color: green; text-align: right"/>
+            <button class="btn-primary btn col-md-offset-2">Valider</button>
+        </div>
+    </form>
+    <div>
+
+        {#
+            <li>
+                <a href="{{ path('reception_edit', { 'id': reception.id }) }}">Edit</a>
+            </li>
+                {{ form_start(delete_form) }}
+                    <input type="submit" value="Delete">
+                {{ form_end(delete_form) }}
+        #}
+    </div>
 {% endblock %}

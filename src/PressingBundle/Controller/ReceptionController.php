@@ -22,6 +22,15 @@ class ReceptionController extends Controller {
         $em = $this->getDoctrine()->getManager();
 
         $receptions = $em->getRepository('PressingBundle:Reception')->findAll();
+        $recept = new Reception();
+        foreach ($receptions as $recept) {
+            $avance = $recept->getMontantVerse();
+            $entreFi = $em->getRepository('PressingBundle:EntreFinance')->findBy(array('reception' => $recept));
+            foreach ($entreFi as $entre) {
+                $avance+= $entre->getMontant();
+            }
+            $recept->setMontantVerse($avance);
+        }
 
         return $this->render('reception/index.html.twig', array(
                     'receptions' => $receptions,
@@ -32,12 +41,15 @@ class ReceptionController extends Controller {
      * Recu reception.
      *
      */
-    public function recuAction() {
+    public function recuAction($id) {
         $em = $this->getDoctrine()->getManager();
 
-
+        $reception = $em->getRepository('PressingBundle:Reception')->find($id);
+        $articleInterv = $em->getRepository('PressingBundle:ArticleIntervenant')->findBy(array('idReception' => $reception));
 
         return $this->render('reception/recuReception.html.twig', array(
+                    'reception' => $reception,
+                    'artInterv' => $articleInterv
         ));
     }
 
@@ -55,28 +67,19 @@ class ReceptionController extends Controller {
         $client = $em->getRepository('PressingBundle:Client')->findAll();
         $article = $em->getRepository('PressingBundle:Article')->findAll();
 
-        $listArticleIntervenants = $em->getRepository('PressingBundle:ArticleIntervenant')->findBy(array('enCours' => true));
-
-        foreach ($listArticleIntervenants as $intervenant) {
-            $em->remove($intervenant);
-            $em->flush();
-        }
-
 
         if ($form->isSubmitted()) {
             $em = $this->getDoctrine()->getManager();
+
 
             $express = $request->request->get("express");
             $nomClient = $request->request->get("nomClient");
             $phoneClient = $request->request->get("phoneClient");
 
-            $date = new \DateTime("now");
-
-            die($date);
+            $date = \DateTime::createFromFormat("y-m-d h:m:s", date('y-m-d h:m:s'));
 
 
-
-            $leClient = $em->getRepository('PressingBundle:Client')->findOneBy(array('nom' => $nomClient, 'telephone' => $phoneClient));
+            $leClient = $em->getRepository('PressingBundle:Client')->findOneBy(array('nom' => $nomClient));
 
             if ($leClient == NULL) {
                 $leClient = new Client();
@@ -89,12 +92,27 @@ class ReceptionController extends Controller {
             $reception->setClient($leClient);
             $reception->setExpress($express);
 
+            //Assignation des articles inervenants
+            $art = new ArticleIntervenant();
             $em->persist($reception);
+            $articleInterv = $em->getRepository('PressingBundle:ArticleIntervenant')->findBy(array('enCours' => true));
+            foreach ($articleInterv as $art) {
+                $art->setIdReception($reception);
+                $art->setEnCours(FALSE);
+                $em->persist($art);
+            }
             $em->flush();
 
             return $this->redirectToRoute('reception_show', array(
                         'id' => $reception->getId()
             ));
+        } else {
+            $listArticleIntervenants = $em->getRepository('PressingBundle:ArticleIntervenant')->findBy(array('enCours' => true));
+
+            foreach ($listArticleIntervenants as $intervenant) {
+                $em->remove($intervenant);
+                $em->flush();
+            }
         }
 
         return $this->render('reception/new.html.twig', array(
@@ -111,10 +129,21 @@ class ReceptionController extends Controller {
      */
     public function showAction(Reception $reception) {
         $deleteForm = $this->createDeleteForm($reception);
+        $em = $this->getDoctrine()->getManager();
+
+        $articleInterv = $em->getRepository('PressingBundle:ArticleIntervenant')->findBy(array('idReception' => $reception));
+
+        $avance = $reception->getMontantVerse();
+        $entreFi = $em->getRepository('PressingBundle:EntreFinance')->findBy(array('reception' => $reception));
+        foreach ($entreFi as $entre) {
+            $avance+= $entre->getMontant();
+        }
+        $reception->setMontantVerse($avance);
 
         return $this->render('reception/show.html.twig', array(
                     'reception' => $reception,
                     'delete_form' => $deleteForm->createView(),
+                    'articleInterv' => array_reverse($articleInterv)
         ));
     }
 

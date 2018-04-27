@@ -35,13 +35,14 @@ class ArticleController extends Controller {
         $form = $this->createForm('PressingBundle\Form\ArticleType', $article);
         $form->handleRequest($request);
 
-        if (isset($_GET['nom'])) {
-            $em = $this->getDoctrine()->getManager();
 
+        if (isset($_GET['nom']) && isset($_GET['nbre']) && isset($_GET['prix'])) {
+            $em = $this->getDoctrine()->getManager();
             $article = new Article();
             $article->setDesignation($_GET['nom']);
-            $article->setNbrePiece($_GET['nbrePiece']);
-            $article->setPrixUnit($_GET['prixUnit']);
+            $article->setNbrePiece($_GET['nbre']);
+            $article->setPrixUnit($_GET['prix']);
+            $article->setDefinitif(0);
             $em->persist($article);
             $em->flush();
             return $this->redirectToRoute('article_show', array('id' => $article->getId()));
@@ -50,6 +51,20 @@ class ArticleController extends Controller {
         return $this->render('article/newTemplate.html.twig', array(
                     'article' => $article,
                     'form' => $form->createView(),
+        ));
+    }
+
+    /**
+     * Creates a renew Article list.
+     *
+     */
+    public function newListAction() {
+        $em = $this->getDoctrine()->getManager();
+
+        $listArticle = $em->getRepository('PressingBundle:Article')->findAll();
+
+        return $this->render('article/articleList.html.twig', array(
+                    'listArticle' => $listArticle
         ));
     }
 

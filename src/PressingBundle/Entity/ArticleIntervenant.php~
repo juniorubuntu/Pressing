@@ -12,6 +12,10 @@ use Symfony\Component\Validator\Constraints as Assert;
  */
 class ArticleIntervenant {
 
+    function __construct() {
+        $this->setQuantiteRetire(0);
+    }
+
     /**
      * @var integer
      *
@@ -177,6 +181,28 @@ class ArticleIntervenant {
      */
     public function getArticle() {
         return $this->article;
+    }
+
+    /**
+     * Set couleur
+     *
+     * @param string $couleur
+     *
+     * @return ArticleIntervenant
+     */
+    public function setCouleur($couleur) {
+        $this->couleur = $couleur;
+
+        return $this;
+    }
+
+    /**
+     * Get couleur
+     *
+     * @return string
+     */
+    public function getCouleur() {
+        return $this->couleur;
     }
 
 }

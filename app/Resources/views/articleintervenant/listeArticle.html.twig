@@ -1,5 +1,5 @@
 Liste provisoire des articles de la transaction
-<table class="table table-bordered table-hover">
+<table class="table table-bordered table-hover" id="articleInterv">
     <thead class="alert-info">
         <tr>
             <th>N°</th>
@@ -27,9 +27,21 @@ Liste provisoire des articles de la transaction
             {% set num = num + 1 %}
             {% set somme = somme + articleIntervenant.quantiteDepose * articleIntervenant.article.prixunit %}
         {% endfor %}
+        {% if express is defined %}
+            <tr>
+                <td colspan="5"><span style="color: blue">SERVICE EXPRESS </span></td>
+                <td colspan="2"><span style="color: blue">{{somme * express}} FCFA</span></td>
+            </tr>
+            {% set somme =  somme * express + somme%}
+        {% endif %}
         <tr>
             <td colspan="5">Total: </td>
-            <td colspan="2">{{somme}} FCFA</td>
+            <td colspan="2"><span id="total" style="color: green; font-size: 16px">{{somme}}</span></td>
         </tr>
     </tbody>
+    <script>
+        document.getElementById('montantTotal').value = document.getElementById('total').innerHTML;
+        document.getElementById('pressingbundle_reception_montantTotal').value = document.getElementById('total').innerHTML;
+        document.getElementById('pressingbundle_reception_montantVerse').max = document.getElementById('montantTotal').value;
+    </script>
 </table>

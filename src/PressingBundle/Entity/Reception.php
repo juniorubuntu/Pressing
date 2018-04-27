@@ -12,6 +12,14 @@ use Symfony\Component\Validator\Constraints as Assert;
  */
 class Reception {
 
+    public function __toString() {
+        return $this->getId() . ' ';
+    }
+
+    public function __construct() {
+        $this->setLivre(false);
+    }
+
     /**
      * @var integer
      *
@@ -45,10 +53,15 @@ class Reception {
 
     /**
      * @var text
-     * @ORM\Column(name="gratuit", type="text")
+     * @ORM\Column(name="gratuit", type="text", nullable=true)
      */
     private $gratuit;
 
+    /**
+     * @var boolean
+     * @ORM\Column(name="livre", type="boolean", nullable=true)
+     */
+    private $livre;
 
     /**
      * @var integer
@@ -244,7 +257,7 @@ class Reception {
      *
      * @return Reception
      */
-    public function setPersonnel(\PressingBundle\Entity\Personnel $personnel = null) {
+    public function setPersonnel(\PressingBundle\Entity\User $personnel = null) {
         $this->personnel = $personnel;
 
         return $this;
@@ -257,6 +270,28 @@ class Reception {
      */
     public function getPersonnel() {
         return $this->personnel;
+    }
+
+    /**
+     * Set livre
+     *
+     * @param boolean $livre
+     *
+     * @return Reception
+     */
+    public function setLivre($livre) {
+        $this->livre = $livre;
+
+        return $this;
+    }
+
+    /**
+     * Get livre
+     *
+     * @return boolean
+     */
+    public function getLivre() {
+        return $this->livre;
     }
 
 }

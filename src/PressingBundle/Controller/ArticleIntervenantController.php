@@ -20,7 +20,14 @@ class ArticleIntervenantController extends Controller {
     public function listeAction($id, $qte, $couleur) {
         $em = $this->getDoctrine()->getManager();
 
-        if (($id != 0 ) && ($qte != 0)) {
+        if (isset($_GET['express'])) {
+            $listArticleIntervenants = $em->getRepository('PressingBundle:ArticleIntervenant')->findBy(array('enCours' => true));
+            $express = $_GET['express'];
+            return $this->render('articleintervenant/listeArticle.html.twig', array(
+                        'liste' => $listArticleIntervenants,
+                        'express' => $express
+            ));
+        } elseif (($id != 0 ) && ($qte != 0)) {
             $article = $em->getRepository('PressingBundle:Article')->find($id);
             $articleIntervenant = new ArticleIntervenant();
             $articleIntervenant->setIdReception(NULL);

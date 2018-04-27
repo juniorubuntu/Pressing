@@ -37,6 +37,20 @@ pressing_articleintervenant:
     resource: "@PressingBundle/Resources/config/routing/articleintervenant.yml"
     prefix:   /articleintervenant
 
+
+pressing_entrefinance:
+    resource: "@PressingBundle/Resources/config/routing/entrefinance.yml"
+    prefix:   /entrefinance
+    
+pressing_livraison:
+    resource: "@PressingBundle/Resources/config/routing/livraison.yml"
+    prefix:   /livraison
+    
+    
+pressing_promotion:
+    resource: "@PressingBundle/Resources/config/routing/promotion.yml"
+    prefix:   /promotion
+
 pressing_homepage:
     path:     /
     defaults: { _controller: PressingBundle:Default:index }

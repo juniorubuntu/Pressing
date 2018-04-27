@@ -1,0 +1,44 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <h1>Promotion</h1>
+
+    <table>
+        <tbody>
+            <tr>
+                <th>Id</th>
+                <td>{{ promotion.id }}</td>
+            </tr>
+            <tr>
+                <th>Nom</th>
+                <td>{{ promotion.nom }}</td>
+            </tr>
+            <tr>
+                <th>Debut</th>
+                <td>{% if promotion.debut %}{{ promotion.debut|date('Y-m-d') }}{% endif %}</td>
+            </tr>
+            <tr>
+                <th>Fin</th>
+                <td>{% if promotion.fin %}{{ promotion.fin|date('Y-m-d') }}{% endif %}</td>
+            </tr>
+            <tr>
+                <th>Reduction</th>
+                <td>{{ promotion.reduction }}</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <ul>
+        <li>
+            <a href="{{ path('promotion_index') }}">Back to the list</a>
+        </li>
+        <li>
+            <a href="{{ path('promotion_edit', { 'id': promotion.id }) }}">Edit</a>
+        </li>
+        <li>
+            {{ form_start(delete_form) }}
+                <input type="submit" value="Delete">
+            {{ form_end(delete_form) }}
+        </li>
+    </ul>
+{% endblock %}

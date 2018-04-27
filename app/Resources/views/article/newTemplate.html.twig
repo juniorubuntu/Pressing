@@ -42,7 +42,7 @@
             </div>
         </div>
         <div class="">
-            <input onclick="enregisitrer();" type="button" value="Ajouter" class="btn btn-primary pull-right"/>
+            <a href="{{path('article_newTemplate', {nom: "NOM_ARTICLE", prix: "PRIX", nbre: "NBRE_PIECE"} )}}" id="lien_new" target="blank"><input onclick="enregisitrer();" type="button" value="Ajouter" class="btn btn-primary pull-right"/></a>
         </div>
     </div>
     <script>
@@ -50,12 +50,13 @@
             var nom = document.getElementById('pressingbundle_article_designation').value;
             var prixUnit = document.getElementById('pressingbundle_article_prixUnit').value;
             var nbrePiece = document.getElementById('pressingbundle_article_nbrePiece').value;
-            $.post('{{path('article_newTemplate')}}',
-                    {
-                        nom: nom,
-                        prixUnit: prixUnit,
-                        nbrePiece: nbrePiece}
-            );
+            var lien = document.getElementById('lien_new').href;
+            lien = lien.replace("NOM_ARTICLE", nom);
+            lien = lien.replace("PRIX", prixUnit);
+            lien = lien.replace("NBRE_PIECE", nbrePiece);
+            document.getElementById('lien_new').href = lien;
+            $('#pressingbundle_article_designation').val('');
+            $('.bs-example-modal-sm').modal('hide');
         }
     </script>
 </fieldset>

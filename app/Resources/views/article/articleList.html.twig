@@ -1,0 +1,5 @@
+<select>
+    {% for article in listArticle %}
+        <option value="{{article.id}}">{{article | upper}}</option>
+    {% endfor %}
+</select>

@@ -1,0 +1,35 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <h1>Lites des livraisons effectuées</h1>
+    <hr>
+    <table class="table table-striped panel panel-primary">
+        <thead class="panel-heading alert-success">
+            <tr>
+                <th>Nom client</th>
+                <th>Id Reception</th>
+                <th>Voir les détails</th>
+                <th>Reçu</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for entreFinance in entreFinances %}
+                <tr>
+                    <td><a href="{{ path('client_show', { 'id': entreFinance.reception.client.id }) }}">{{ entreFinance.reception.client }}</a></td>
+                    <td><a href="{{ path('reception_show', { 'id': entreFinance.reception.id }) }}">18K00{{ entreFinance.reception.id }}</a></td>
+                    <td><a class="glyphicon glyphicon-list" href="{{ path('entrefinance_show', { 'id': entreFinance.id }) }}"></a></td>
+                    <td>
+                        <a class="btn btn-default" href="{{ path('livraison_recu', { 'id': entreFinance.reception.id})}}">Imprimer le reçu</a>
+                    </td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+    {# <ul>
+         <li>
+             <a href="{{ path('entrefinance_new') }}">Create a new entreFinance</a>
+         </li>
+     </ul>
+    #}
+{% endblock %}

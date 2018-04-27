@@ -28,3 +28,8 @@ article_newTemplate:
     path:     /newTemplate
     defaults: { _controller: "PressingBundle:Article:newTemplate" }
     methods:  [GET, POST]
+
+article_newList:
+    path:     /newList
+    defaults: { _controller: "PressingBundle:Article:newList" }
+    methods:  GET
